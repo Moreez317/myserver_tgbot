@@ -1,0 +1,20 @@
+[Unit]
+Description=Telegram bot
+After=syslog.target
+
+[Service]
+Type=simple
+User=alexander
+Group=alexander
+
+Environment="TELEGRAM_API_TOKEN=insert_telegram_token_here"
+Environment="NGROK_TOKEN=insert_ngrok_token_here"
+Environment="TORRENT_FILES_DIR=transmission_watch_dir"
+Environment="LOGS_DIR=your_logs_dir"
+
+WorkingDirectory=/mnt/server/telegram_bot
+ExecStart=/usr/bin/python3 run.py
+
+[Install]
+WantedBy=multi-user.target
+

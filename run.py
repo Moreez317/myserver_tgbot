@@ -9,7 +9,7 @@ from botactions.constants import SHUTDOWN_COMMAND, REBOOT_COMMAND, AUTHORIZED_US
 
 TELEGRAM_API_TOKEN = os.environ.get("TELEGRAM_API_TOKEN")
 TORRENT_FILES_DIR = os.environ.get("TORRENT_FILES_DIR")
-LOG_DIR = './logs/log'
+LOG_DIR = os.environ.get("LOGS_DIR")
 
 bot = telebot.TeleBot(TELEGRAM_API_TOKEN)
 
@@ -56,7 +56,7 @@ def send_avaliable_actions(message):
 
 
 # Закомментировано поскольку не хочется иметь возможность исполнять
-# Команды из под SUDO прям в телеге
+# команды из под SUDO прям в телеге
 # @bot.message_handler(commands=['enter_cli'])
 # def cli_emulation(message):
 #   if botactions.verify_user(message.from_user.id) == True:
@@ -106,5 +106,5 @@ def ngrok_kill(message):
 
 if __name__ == "__main__":
     logging.basicConfig(filename=LOG_DIR +
-                        str(datetime.now())+".log", filemode='w', level=logging.INFO)
+                        str(datetime.now())+".log", filemode='w', level=logging.DEBUG)
     start_bot()
