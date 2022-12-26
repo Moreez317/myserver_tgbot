@@ -16,8 +16,11 @@ bot = telebot.TeleBot(TELEGRAM_API_TOKEN)
 
 def start_bot():
     logging.info(str(datetime.now()) + "/bot started!")
-    bot.infinity_polling()
+    try:
+        bot.infinity_polling()
 
+    except Exception as exception:
+        logging.error(str(datetime.now()) + str(exception))
 
 def download_file(message):
     file_name = message.document.file_name
