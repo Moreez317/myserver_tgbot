@@ -10,6 +10,7 @@ from botactions.constants import SHUTDOWN_COMMAND, REBOOT_COMMAND, AUTHORIZED_US
 TELEGRAM_API_TOKEN = os.environ.get("TELEGRAM_API_TOKEN")
 TORRENT_FILES_DIR = os.environ.get("TORRENT_FILES_DIR")
 LOG_DIR = os.environ.get("LOGS_DIR")
+#LOG_DIR = 'logs/'
 
 bot = telebot.TeleBot(TELEGRAM_API_TOKEN)
 
@@ -17,7 +18,7 @@ bot = telebot.TeleBot(TELEGRAM_API_TOKEN)
 def start_bot():
     logging.info(str(datetime.now()) + "/bot started!")
     try:
-        bot.infinity_polling()
+        bot.infinity_polling(timeout=123)
 
     except Exception as exception:
         logging.error(str(datetime.now()) + str(exception))
