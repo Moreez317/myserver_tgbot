@@ -16,12 +16,13 @@ bot = telebot.TeleBot(TELEGRAM_API_TOKEN)
 
 
 def start_bot():
-    logging.info(str(datetime.now()) + "/bot started!")
+    logging.info("bot started!")
     try:
         bot.infinity_polling(timeout=123)
 
     except Exception as exception:
-        logging.error(str(datetime.now()) + str(exception))
+        logging.error(exception)
+
 
 def download_file(message):
     file_name = message.document.file_name
@@ -30,6 +31,9 @@ def download_file(message):
     if file_name[-8::] == '.torrent':
         with open(TORRENT_FILES_DIR + "/" + file_name, 'wb') as new_file:
             new_file.write(downloaded_file)
+
+        logging.info("Added torrent: " + file_name)
+
     else:
         bot.send_message(message.from_user.id, "Incorrect file format!")
 
@@ -46,8 +50,7 @@ def download_file(message):
 @bot.message_handler(commands=['start', 'help'])
 def send_welcome(message):
 
-    logging.info(str(datetime.now()) + "/id:" +
-                 str(message.from_user.id) + "/trying to start")
+    logging.info("id:" + str(message.from_user.id) + " trying to start")
 
     if botactions.verify_user(message.from_user.id) == True:
         bot.send_message(message.from_user.id, AUTHORIZED_USER_MESSAGE)
@@ -90,6 +93,9 @@ def reboot(message):
 def ngrok_create(message):
     if botactions.verify_user(message.from_user.id) == True:
         tunnel = botactions.get_active_tunnel()
+
+        logging.info(str(tunnel))
+
         if tunnel:
             bot.send_message(message.from_user.id, str(tunnel))
         else:
@@ -104,11 +110,15 @@ def ngrok_kill(message):
             tunnel = botactions.get_active_tunnel()[0]
             botactions.kill_active_tunnel(tunnel)
             bot.send_message(message.from_user.id, "Closed!")
+
+            logging.info("Closed! " + str(tunnel))
+
         except IndexError:
             bot.send_message(message.from_user.id, "Tunnel already closed!")
 
 
 if __name__ == "__main__":
-    logging.basicConfig(filename=LOG_DIR +
-                        str(datetime.now())+".log", filemode='w', level=logging.DEBUG)
+    log_format = "%(asctime)s - %(message)s"
+    logging.basicConfig(filename=LOG_DIR + str(datetime.now()) +
+                        ".log", filemode='w', level=logging.INFO, format=log_format)
     start_bot()
