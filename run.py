@@ -49,7 +49,6 @@ def download_file(message):
 
 @bot.message_handler(commands=['start', 'help'])
 def send_welcome(message):
-
     logging.info("id:" + str(message.from_user.id) + " trying to start")
 
     if botactions.verify_user(message.from_user.id) == True:
@@ -94,13 +93,13 @@ def ngrok_create(message):
     if botactions.verify_user(message.from_user.id) == True:
         tunnel = botactions.get_active_tunnel()
 
-        logging.info(str(tunnel))
-
         if tunnel:
             bot.send_message(message.from_user.id, str(tunnel))
+            logging.info("Made new tunnel: " + str(tunnel))
         else:
             tunnel = botactions.make_new_tunnel(22, "tcp")
             bot.send_message(message.from_user.id, str(tunnel))
+            logging.info("Tunnel already exists: " + str(tunnel))
 
 
 @bot.message_handler(commands=['kill_tunnel'])
